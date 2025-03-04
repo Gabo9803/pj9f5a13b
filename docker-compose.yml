@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - web
+    networks:
+      - webnet  # Definir red compartida
+
+  web:
+    image: php:8.3-apache
+    deploy:
+      replicas: 15
+    volumes:
+      - ./index.html:/var/www/html/index.html  # Asegurar que el HTML esté accesible
+    networks:
+      - webnet  # Conectar los contenedores web a la misma red
+
+networks:
+  webnet:  # Definir la red para la comunicación
